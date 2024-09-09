@@ -5,7 +5,11 @@ import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
 import { CURRENCY, formatCurrencyAmount } from "features/utils";
 import { useExpressSendMutation } from "./mutations";
 
-const amounts = ["100", "1000", "10000"];
+const amounts = ["100", "1000", "10000", "50000", "100000"];
+const TRANSACTION_FEE_PERCENT = Number(
+  process.env.REACT_APP_TRANSACTION_FEE_PERCENT
+);
+const TRANSACTION_FEE_MIN = Number(process.env.REACT_APP_TRANSACTION_FEE_MIN);
 
 function PayMerchant() {
   const { data: walletAccounts } = useGetCurrentUserWalletAccounts();
@@ -14,21 +18,34 @@ function PayMerchant() {
   const [amount, setAmount] = useState("");
   const [isCustom, setIsCustom] = useState(false);
   const [amountToPay, setAmountToPay] = useState(0);
+  const [transactionFee, setTransactionFee] = useState(TRANSACTION_FEE_MIN);
+
+  const calculateFee = (amount: number) => {
+    const calculatedFee = amount * TRANSACTION_FEE_PERCENT;
+    return Math.max(calculatedFee, TRANSACTION_FEE_MIN);
+  };
 
   const handleAmountButton = (amountItem: string) => {
+    const numericAmount = Number(amountItem);
+    const fee = calculateFee(numericAmount);
     setAmount(amountItem);
     setIsCustom(false);
-    setAmountToPay(Number(amountItem));
+    setTransactionFee(fee);
+    setAmountToPay(numericAmount + fee);
   };
 
   const handleCustomButton = () => {
     setAmount("");
     setIsCustom(true);
-    setAmountToPay(0);
+    setTransactionFee(TRANSACTION_FEE_MIN);
+    setAmountToPay(TRANSACTION_FEE_MIN);
   };
 
   const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setAmountToPay(Number(event.target.value));
+    const inputAmount = Number(event.target.value);
+    const fee = calculateFee(inputAmount);
+    setTransactionFee(fee);
+    setAmountToPay(inputAmount + fee);
   };
 
   const handleExpressSend = async () => {
@@ -91,6 +108,11 @@ function PayMerchant() {
             Custom
           </Button>
         </Grid2>
+      </Stack>
+      <Stack flexDirection="row" mt="1em">
+        <Typography variant="h5">
+          Fee: {formatCurrencyAmount(transactionFee, CURRENCY.PHP)}
+        </Typography>
       </Stack>
       {isCustom && (
         <TextField

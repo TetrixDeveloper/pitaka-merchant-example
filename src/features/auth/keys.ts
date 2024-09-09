@@ -4,4 +4,8 @@ export const authKeys = {
   getAuthUserDetails: () => [...authKeys.all, "getAuthUserDetails"] as const,
   checkAuth: () => [...authKeys.all, "checkAuth"] as const,
   getCurrentUser: () => [...authKeys.all, "checkAuth"] as const,
+  getCurrentUserWalletAccounts: () => [
+    ...authKeys.getCurrentUser(),
+    "wallet-accounts",
+  ],
 };

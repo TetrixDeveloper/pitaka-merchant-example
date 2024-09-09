@@ -1,10 +1,16 @@
-import { Button, Grid2, Stack, TextField, Typography } from "@mui/material";
-import { CURRENCY, formatCurrencyAmount } from "features/utils";
 import { ChangeEvent, useState } from "react";
+import { Button, Grid2, Stack, TextField, Typography } from "@mui/material";
+
+import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
+import { CURRENCY, formatCurrencyAmount } from "features/utils";
+import { useExpressSendMutation } from "./mutations";
 
 const amounts = ["100", "1000", "10000"];
 
 function PayMerchant() {
+  const { data: walletAccounts } = useGetCurrentUserWalletAccounts();
+  const { mutateAsync, isPending } = useExpressSendMutation();
+
   const [amount, setAmount] = useState("");
   const [isCustom, setIsCustom] = useState(false);
   const [amountToPay, setAmountToPay] = useState(0);
@@ -23,6 +29,34 @@ function PayMerchant() {
 
   const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAmountToPay(Number(event.target.value));
+  };
+
+  const handleExpressSend = async () => {
+    if (
+      walletAccounts &&
+      walletAccounts.length > 0 &&
+      process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT
+    ) {
+      const payload = {
+        senderAccountNumber: walletAccounts[0].accountNumber,
+        recipientAccountNumber: process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT,
+        amount: amountToPay,
+      };
+
+      try {
+        await mutateAsync(payload);
+
+        alert("Success!");
+
+        setAmount("");
+        setIsCustom(false);
+        setAmountToPay(0);
+      } catch (error) {
+        alert("Error processing your transaction");
+      }
+    } else {
+      alert("Error: Wallets are undefined");
+    }
   };
 
   return (
@@ -70,10 +104,10 @@ function PayMerchant() {
       )}
       <Button
         variant="contained"
-        onClick={() => {}}
+        onClick={handleExpressSend}
         size="large"
         sx={{ marginTop: 2 }}
-        disabled={!amountToPay}
+        disabled={!amountToPay || isPending}
       >
         Next
       </Button>

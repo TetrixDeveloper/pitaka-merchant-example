@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Stack, Typography } from "@mui/material";
 
 function Login() {
-  const { loginWithRedirect, logout } = useAuth0();
+  const { loginWithRedirect } = useAuth0();
 
   const handleLoginWithGoogle = async () => await loginWithRedirect();
 

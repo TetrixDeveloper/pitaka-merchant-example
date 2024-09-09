@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { authKeys } from "./keys";
 import { setAuthToken } from "graphQLClient";
-import { fetchCurrentUserDetails } from "./services";
+import {
+  fetchCurrentUserDetails,
+  fetchCurrentUserWalletAccounts,
+} from "./services";
+import { authKeys } from "./keys";
 
 export const useGetTokensQuery = () => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
@@ -30,5 +33,12 @@ export const useGetCurrentUserDetailsQuery = () => {
     queryKey: authKeys.getCurrentUser(),
     queryFn: () => getUserDetails(),
     enabled: Boolean(tokenData),
+  });
+};
+
+export const useGetCurrentUserWalletAccounts = () => {
+  return useQuery({
+    queryKey: authKeys.getCurrentUserWalletAccounts(),
+    queryFn: () => fetchCurrentUserWalletAccounts(),
   });
 };

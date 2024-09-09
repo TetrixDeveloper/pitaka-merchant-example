@@ -18,4 +18,8 @@ export const setAuthToken = (tokenId: string) => {
   );
 };
 
+export const setPitakaToken = (token: string) => {
+  graphQLClient.setHeader("x-pitaka-token", token);
+};
+
 export default graphQLClient;

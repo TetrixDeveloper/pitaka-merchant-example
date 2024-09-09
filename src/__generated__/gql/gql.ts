@@ -14,6 +14,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetCurrentUserDetails {\n    currentUser {\n      getCurrentUserDetails {\n        id\n        displayName\n        auth0UserId\n        createdAt\n        profile {\n          id\n          userId\n          firstName\n          middleName\n          lastName\n          mobileNumber\n          emailAddress\n          userProfilePicture {\n            profilePicture\n            avatarType\n            isUseAvatar\n          }\n        }\n      }\n    }\n  }\n": types.GetCurrentUserDetailsDocument,
+    "\n  query FetchWalletAccounts {\n    currentUser {\n      fetchWalletAccounts {\n        walletAccounts {\n          id\n          accountNumber\n          type\n          name\n          createdAt\n          updatedAt\n        }\n      }\n    }\n  }\n": types.FetchWalletAccountsDocument,
+    "\n  mutation VerifyPin($pin: String!) {\n    currentUser {\n      verifyPin(pin: $pin) {\n        token\n        expiresAt\n      }\n    }\n  }\n": types.VerifyPinDocument,
+    "\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n": types.RequestExpressSendDocument,
 };
 
 /**
@@ -34,6 +37,18 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetCurrentUserDetails {\n    currentUser {\n      getCurrentUserDetails {\n        id\n        displayName\n        auth0UserId\n        createdAt\n        profile {\n          id\n          userId\n          firstName\n          middleName\n          lastName\n          mobileNumber\n          emailAddress\n          userProfilePicture {\n            profilePicture\n            avatarType\n            isUseAvatar\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetCurrentUserDetails {\n    currentUser {\n      getCurrentUserDetails {\n        id\n        displayName\n        auth0UserId\n        createdAt\n        profile {\n          id\n          userId\n          firstName\n          middleName\n          lastName\n          mobileNumber\n          emailAddress\n          userProfilePicture {\n            profilePicture\n            avatarType\n            isUseAvatar\n          }\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FetchWalletAccounts {\n    currentUser {\n      fetchWalletAccounts {\n        walletAccounts {\n          id\n          accountNumber\n          type\n          name\n          createdAt\n          updatedAt\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query FetchWalletAccounts {\n    currentUser {\n      fetchWalletAccounts {\n        walletAccounts {\n          id\n          accountNumber\n          type\n          name\n          createdAt\n          updatedAt\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation VerifyPin($pin: String!) {\n    currentUser {\n      verifyPin(pin: $pin) {\n        token\n        expiresAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation VerifyPin($pin: String!) {\n    currentUser {\n      verifyPin(pin: $pin) {\n        token\n        expiresAt\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

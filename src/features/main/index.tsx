@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, Container } from "@mui/material";
 import { Auth0ContextInterface, User, withAuth0 } from "@auth0/auth0-react";
+import { setPitakaToken } from "graphQLClient";
 
 import PayMerchant from "features/merchant/PayMerchant";
 import Login from "features/login";
-import Logo from "assets/PitakaDA5IconDark.png";
 import { useGetCurrentUserDetailsQuery } from "features/auth/queries";
+import PinInput from "features/auth/PinInput";
+
+import Logo from "assets/PitakaDA5IconDark.png";
 
 interface MainProps {
   auth0: Auth0ContextInterface<User>;
@@ -13,8 +16,22 @@ interface MainProps {
 
 function Main({ auth0 }: MainProps) {
   const { isAuthenticated, isLoading } = auth0;
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const { data } = useGetCurrentUserDetailsQuery();
+
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isPinVerified = Boolean(localStorage.getItem("x-pitaka-token"));
+
+  const renderComponents = useCallback(() => {
+    if (isUserAuthenticated && isPinVerified) {
+      setPitakaToken(localStorage.getItem("x-pitaka-token") || "");
+      return <PayMerchant />;
+    }
+    if (isAuthenticated && !isPinVerified) {
+      return <PinInput />;
+    }
+
+    return <Login />;
+  }, [isAuthenticated, isPinVerified, isUserAuthenticated]);
 
   useEffect(() => {
     if (!isAuthenticated && !isLoading && !data) {
@@ -22,7 +39,7 @@ function Main({ auth0 }: MainProps) {
     } else {
       setIsUserAuthenticated(true);
     }
-  }, [isAuthenticated, isLoading, setIsUserAuthenticated]);
+  }, [data, isAuthenticated, isLoading, setIsUserAuthenticated]);
 
   return (
     <Container
@@ -45,7 +62,7 @@ function Main({ auth0 }: MainProps) {
           textAlign: "center",
         }}
       >
-        {isUserAuthenticated ? <PayMerchant /> : <Login />}
+        {renderComponents()}
       </Box>
     </Container>
   );

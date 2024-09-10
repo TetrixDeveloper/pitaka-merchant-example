@@ -76,12 +76,15 @@ function PayMerchant() {
     }
   };
 
+  console.log('walletsAccount', walletAccounts);
+  console.log(process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT);
+
   return (
     <Stack spacing={2}>
       <Stack flexDirection="row" mt="1em">
         <Typography variant="h5">Merchant: </Typography>
         <Typography variant="h5" color="#6b7280" pl={1}>
-          DTaka
+          DWallet Technologies Inc.
         </Typography>
       </Stack>
       <Stack flexDirection="row" mt="1em">

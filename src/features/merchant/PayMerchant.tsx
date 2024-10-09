@@ -3,7 +3,9 @@ import { Button, Grid2, Stack, TextField, Typography } from "@mui/material";
 
 import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
 import { CURRENCY, formatCurrencyAmount } from "features/utils";
-import { useExpressSendMutation } from "./mutations";
+import { useClearPaymentIntentMutation } from "./mutations";
+import { useQuery } from "@tanstack/react-query";
+import { getFetchPaymentIntentQuery } from "./queries";
 
 const amounts = ["100", "1000", "10000", "50000", "100000"];
 const TRANSACTION_FEE_PERCENT = Number(
@@ -13,7 +15,12 @@ const TRANSACTION_FEE_MIN = Number(process.env.REACT_APP_TRANSACTION_FEE_MIN);
 
 function PayMerchant() {
   const { data: walletAccounts } = useGetCurrentUserWalletAccounts();
-  const { mutateAsync, isPending } = useExpressSendMutation();
+  const { mutateAsync, isPending } = useClearPaymentIntentMutation();
+
+  const paymentIntentId = window.location.pathname.split("/")?.[1];
+  const { data: paymentIntent } = useQuery(
+    getFetchPaymentIntentQuery(paymentIntentId)
+  );
 
   const [amount, setAmount] = useState("");
   const [isCustom, setIsCustom] = useState(false);
@@ -48,31 +55,21 @@ function PayMerchant() {
     setAmountToPay(inputAmount + fee);
   };
 
-  const handleExpressSend = async () => {
-    if (
-      walletAccounts &&
-      walletAccounts.length > 0 &&
-      process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT
-    ) {
-      const payload = {
-        senderAccountNumber: walletAccounts[0].accountNumber,
-        recipientAccountNumber: process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT,
-        amount: amountToPay,
-      };
-
+  const handlePayment = async () => {
+    if (paymentIntent && walletAccounts?.[0]?.accountNumber) {
       try {
-        await mutateAsync(payload);
-
+        await mutateAsync({
+          amount: amountToPay,
+          senderAccountNumber: walletAccounts[0].accountNumber,
+          paymentIntentId: paymentIntent.id,
+        });
         alert("Success!");
-
         setAmount("");
         setIsCustom(false);
         setAmountToPay(0);
       } catch (error) {
         alert("Error processing your transaction");
       }
-    } else {
-      alert("Error: Wallets are undefined");
     }
   };
 
@@ -129,7 +126,7 @@ function PayMerchant() {
       )}
       <Button
         variant="contained"
-        onClick={handleExpressSend}
+        onClick={handlePayment}
         size="large"
         sx={{ marginTop: 2 }}
         disabled={!amountToPay || isPending}

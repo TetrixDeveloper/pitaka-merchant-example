@@ -17,6 +17,8 @@ const documents = {
     "\n  query FetchWalletAccounts {\n    currentUser {\n      fetchWalletAccounts {\n        walletAccounts {\n          id\n          accountNumber\n          type\n          name\n          createdAt\n          updatedAt\n        }\n      }\n    }\n  }\n": types.FetchWalletAccountsDocument,
     "\n  mutation VerifyPin($pin: String!) {\n    currentUser {\n      verifyPin(pin: $pin) {\n        token\n        expiresAt\n      }\n    }\n  }\n": types.VerifyPinDocument,
     "\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n": types.RequestExpressSendDocument,
+    "\n  mutation ClearPaymentIntent($data: ClearPaymentIntentInput!) {\n    currentUser {\n      clearPaymentIntent(data: $data) {\n        id\n        amount\n        fee\n        status\n        returnUrl\n      }\n    }\n  }\n": types.ClearPaymentIntentDocument,
+    "\n  query FetchPaymentIntent($paymentIntentId: String!) {\n    currentUser {\n      fetchPaymentIntent(paymentIntentId: $paymentIntentId) {\n        id\n        organizationId\n        requestedAmount\n        totalFees\n        description\n        statementDescriptor\n        returnUrl\n        createdAt\n        status\n      }\n    }\n  }\n": types.FetchPaymentIntentDocument,
 };
 
 /**
@@ -49,6 +51,14 @@ export function graphql(source: "\n  mutation VerifyPin($pin: String!) {\n    cu
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RequestExpressSend($data: RequestExpressSendInput!) {\n    currentUser {\n      requestExpressSend(data: $data) {\n        transaction {\n          id\n          sentAmount\n          availableBalance\n          createdAt\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ClearPaymentIntent($data: ClearPaymentIntentInput!) {\n    currentUser {\n      clearPaymentIntent(data: $data) {\n        id\n        amount\n        fee\n        status\n        returnUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ClearPaymentIntent($data: ClearPaymentIntentInput!) {\n    currentUser {\n      clearPaymentIntent(data: $data) {\n        id\n        amount\n        fee\n        status\n        returnUrl\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FetchPaymentIntent($paymentIntentId: String!) {\n    currentUser {\n      fetchPaymentIntent(paymentIntentId: $paymentIntentId) {\n        id\n        organizationId\n        requestedAmount\n        totalFees\n        description\n        statementDescriptor\n        returnUrl\n        createdAt\n        status\n      }\n    }\n  }\n"): (typeof documents)["\n  query FetchPaymentIntent($paymentIntentId: String!) {\n    currentUser {\n      fetchPaymentIntent(paymentIntentId: $paymentIntentId) {\n        id\n        organizationId\n        requestedAmount\n        totalFees\n        description\n        statementDescriptor\n        returnUrl\n        createdAt\n        status\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

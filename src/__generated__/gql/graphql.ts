@@ -18,6 +18,15 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type ActivateOrganizationData = {
+  organization: OrganizationId;
+};
+
+export type ActivateOrganizationInput = {
+  signedAt: Scalars['String']['input'];
+  signedRecordId: Scalars['String']['input'];
+};
+
 export type Address = {
   additionalDetails?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
@@ -167,14 +176,24 @@ export type AdminManageCryptoWalletAccessControlData = {
 };
 
 export type AdminMutation = {
+  adminActivateOrganization: ActivateOrganizationData;
   adminAddUserPermissions: AdminAddUserPermissionsData;
   adminCheckAuthorize: AdminCheckAuthorizationData;
-  adminCreateOrganization: Organization;
+  adminCreateOrganization: OrganizationWithFeesAndLimits;
   adminManageCryptoWalletAccessControl: AdminManageCryptoWalletAccessControlData;
+  adminManageOrganizationFees: ManageOrganizationFeesData;
+  adminManageOrganizationTransactionLimits: ManageOrganizationTransactionLimitsData;
   adminRevokeUserPermissions: AdminRevokeUserPermissions;
   adminUpdateCryptoWalletAMLScore: AdminUpdateCryptoWalletAmlScoreData;
+  adminUpdateOrganization: UpdateOrganizationData;
   adminUpdateUserDetails: AdminUpdateUserDetailsData;
   adminUpdateUserRole: AdminUpdateUserRoleData;
+};
+
+
+export type AdminMutationAdminActivateOrganizationArgs = {
+  data: ActivateOrganizationInput;
+  organizationId: Scalars['String']['input'];
 };
 
 
@@ -195,6 +214,18 @@ export type AdminMutationAdminManageCryptoWalletAccessControlArgs = {
 };
 
 
+export type AdminMutationAdminManageOrganizationFeesArgs = {
+  data: ManageOrganizationFeesInput;
+  organizationId: Scalars['String']['input'];
+};
+
+
+export type AdminMutationAdminManageOrganizationTransactionLimitsArgs = {
+  data: ManageOrganizationTransactionLimitsInput;
+  organizationId: Scalars['String']['input'];
+};
+
+
 export type AdminMutationAdminRevokeUserPermissionsArgs = {
   permissions: Array<UserPermissionType>;
   userId: Scalars['String']['input'];
@@ -203,6 +234,12 @@ export type AdminMutationAdminRevokeUserPermissionsArgs = {
 
 export type AdminMutationAdminUpdateCryptoWalletAmlScoreArgs = {
   cryptoWalletId: Scalars['String']['input'];
+};
+
+
+export type AdminMutationAdminUpdateOrganizationArgs = {
+  data: UpdateOrganizationInput;
+  organizationId: Scalars['String']['input'];
 };
 
 
@@ -228,7 +265,7 @@ export type AdminQuery = {
   adminFetchCryptoWalletDetails: CryptoWallet;
   adminFetchCryptoWallets: AdminFetchCryptoWalletsData;
   adminFetchCurrentUserDetails?: Maybe<AdminFetchCurrentUserDetailsData>;
-  adminFetchOrganizationById: Organization;
+  adminFetchOrganizationById: OrganizationWithFeesAndLimits;
   adminFetchOrganizations: AdminFetchOrganizationsData;
   adminFetchTransactionDetails?: Maybe<AdminTransactionDetails>;
   adminFetchTransactionsCount: AdminFetchTransactionsCountData;
@@ -297,6 +334,7 @@ export type AdminQueryAdminFetchCryptoWalletDetailsArgs = {
 
 export type AdminQueryAdminFetchCryptoWalletsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
+  isBlockedFilter?: InputMaybe<Scalars['Boolean']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   sortBy?: InputMaybe<CryptoWalletsSortByInput>;
   take?: InputMaybe<Scalars['Int']['input']>;
@@ -429,6 +467,7 @@ export type AdminUserLogsData = {
   createdAt: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
+  referenceNumber?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
   user?: Maybe<UserCompleteData>;
@@ -547,8 +586,33 @@ export enum CivilStatus {
   Widowed = 'WIDOWED'
 }
 
+export type ClearPaymentIntentData = {
+  amount: Scalars['Float']['output'];
+  fee: Scalars['Float']['output'];
+  id: Scalars['String']['output'];
+  returnUrl: Scalars['String']['output'];
+  status: MerchantPaymentStatus;
+};
+
+export type ClearPaymentIntentInput = {
+  amount: Scalars['Float']['input'];
+  paymentIntentId: Scalars['String']['input'];
+  senderAccountNumber: Scalars['String']['input'];
+};
+
+export type CreateFavoriteWalletData = {
+  id: Scalars['ID']['output'];
+};
+
+export type CreateFavoriteWalletInput = {
+  favoriteWalletAccountId: Scalars['ID']['input'];
+  walletAccountId: Scalars['ID']['input'];
+};
+
 export type CreateOrganizationInput = {
+  creatorUserId: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  type: OrganizationType;
 };
 
 export type CreateVerificationData = {
@@ -624,6 +688,7 @@ export type CryptoWallet = {
   riskLevel?: Maybe<CryptoWalletRiskLevel>;
   type: CryptoWalletType;
   updatedAt: Scalars['String']['output'];
+  user?: Maybe<UserCompleteData>;
   userId: Scalars['String']['output'];
   walletAddress: Scalars['String']['output'];
 };
@@ -680,11 +745,14 @@ export type CurrentUserMutation = {
   activateCryptoWallet: CryptoWalletData;
   checkBiometric: CheckBiometricData;
   checkWalletAccountAlias: CheckWalletAccountAliasData;
+  clearPaymentIntent: ClearPaymentIntentData;
+  createFavoriteWallet: CreateFavoriteWalletData;
   createVerification: CreateVerificationData;
   generateStaticQRPHCode?: Maybe<GenerateStaticQrphCodeData>;
   getRefreshToken: GetRefreshTokenPayload;
   payBills: PayBillsData;
   registerUser: User;
+  removeFavoriteWallet: RemoveFavoriteWalletData;
   renewAccessToken: RenewAccessTokenPayload;
   requestCashIn: RequestCashInData;
   requestCashOut: RequestCashOutData;
@@ -696,6 +764,7 @@ export type CurrentUserMutation = {
   updatePin: UpdatePinData;
   updateUser: UpdateUserData;
   updateWalletAccountAlias: UpdateWalletAccountAliasData;
+  updateWalletAccountShowAlias: UpdateWalletAccountShowAliasData;
   verifyBiometric: VerifyBiometricData;
   verifyPin: PinVerificationPayload;
 };
@@ -717,6 +786,16 @@ export type CurrentUserMutationCheckWalletAccountAliasArgs = {
 };
 
 
+export type CurrentUserMutationClearPaymentIntentArgs = {
+  data: ClearPaymentIntentInput;
+};
+
+
+export type CurrentUserMutationCreateFavoriteWalletArgs = {
+  data: CreateFavoriteWalletInput;
+};
+
+
 export type CurrentUserMutationCreateVerificationArgs = {
   data: CreateVerificationInput;
 };
@@ -734,6 +813,11 @@ export type CurrentUserMutationPayBillsArgs = {
 
 export type CurrentUserMutationRegisterUserArgs = {
   userData?: InputMaybe<RegisterUserInput>;
+};
+
+
+export type CurrentUserMutationRemoveFavoriteWalletArgs = {
+  data: RemoveFavoriteWalletInput;
 };
 
 
@@ -793,6 +877,11 @@ export type CurrentUserMutationUpdateWalletAccountAliasArgs = {
 };
 
 
+export type CurrentUserMutationUpdateWalletAccountShowAliasArgs = {
+  data: UpdateWalletAccountShowAliasInput;
+};
+
+
 export type CurrentUserMutationVerifyBiometricArgs = {
   sign: Scalars['String']['input'];
 };
@@ -809,12 +898,15 @@ export type CurrentUserQuery = {
   fetchCryptoWallets: FetchUserCryptoWalletsData;
   fetchCurrentUserActiveVerifications: Array<UserVerification>;
   fetchCurrentUserLatestVerification: Array<UserVerification>;
+  fetchFavoriteWallets: Array<FavoriteWallet>;
+  fetchPaymentIntent: PaymentIntent;
   fetchTransactionSumsByPeriod: FetchTransactionSumsByPeriodData;
   fetchUserTransactionDetails?: Maybe<FetchUserTransactionDetailsData>;
   fetchUserTransactions: FetchUserAllTransactionsData;
   fetchWalletAccountBalance: FetchCurrentWalletBalanceData;
   fetchWalletAccounts: FetchCurrentUserWalletAccountsData;
   getCurrentUserDetails: GetCurrentUserDetailsData;
+  searchPhoneContactAccounts: SearchPhoneContactAccountsData;
   searchWalletAccounts: SearchWalletAccountsData;
 };
 
@@ -833,6 +925,16 @@ export type CurrentUserQueryCheckExistingNumberArgs = {
 export type CurrentUserQueryFetchCryptoWalletArgs = {
   type: CryptoWalletType;
   walletAddress: Scalars['String']['input'];
+};
+
+
+export type CurrentUserQueryFetchFavoriteWalletsArgs = {
+  walletAccountId: Scalars['String']['input'];
+};
+
+
+export type CurrentUserQueryFetchPaymentIntentArgs = {
+  paymentIntentId: Scalars['String']['input'];
 };
 
 
@@ -858,6 +960,11 @@ export type CurrentUserQueryFetchWalletAccountBalanceArgs = {
 };
 
 
+export type CurrentUserQuerySearchPhoneContactAccountsArgs = {
+  data: Array<PhoneContactAccountsInput>;
+};
+
+
 export type CurrentUserQuerySearchWalletAccountsArgs = {
   query: Scalars['String']['input'];
 };
@@ -871,6 +978,16 @@ export type DefaultTransactionData = {
   amount: Scalars['Float']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type FavoriteWallet = {
+  accountNumber: Scalars['String']['output'];
+  alias?: Maybe<Scalars['String']['output']>;
+  displayName: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  userProfilePicture?: Maybe<UserProfilePictureType>;
+  walletAccountId: Scalars['ID']['output'];
 };
 
 export type FetchBillerOtherInfoParametersData = {
@@ -967,12 +1084,40 @@ export type IdentityVerificationDetails = {
   selfiePhotoUrl?: Maybe<Scalars['String']['output']>;
 };
 
+export type ManageOrganizationFeesData = {
+  organization: OrganizationId;
+};
+
+export type ManageOrganizationFeesInput = {
+  feeType: PrincipalTransactionType;
+  flatRate?: InputMaybe<Scalars['Float']['input']>;
+  surcharge?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type ManageOrganizationTransactionLimitsData = {
+  organization: OrganizationId;
+};
+
+export type ManageOrganizationTransactionLimitsInput = {
+  incomingDaily?: InputMaybe<Scalars['Int']['input']>;
+  incomingMonthly?: InputMaybe<Scalars['Int']['input']>;
+  outgoingDaily?: InputMaybe<Scalars['Int']['input']>;
+  outgoingMonthly?: InputMaybe<Scalars['Int']['input']>;
+  walletBalance?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum MerchantPaymentStatus {
+  AwaitingNextAction = 'AWAITING_NEXT_ACTION',
+  Processing = 'PROCESSING',
+  Succeeded = 'SUCCEEDED'
+}
+
 export type Mutation = {
   admin: AdminMutation;
   approveReviewVerification?: Maybe<UserVerification>;
   createWalletAccount?: Maybe<WalletAccount>;
   currentUser: CurrentUserMutation;
-  oneTimePassword: OneTimePasswordMutation;
+  sendSMS: SendSmsMutation;
   startReviewVerification?: Maybe<UserVerification>;
   submitUserVerification?: Maybe<UserVerification>;
   transactions: TransactionsMutation;
@@ -1006,33 +1151,23 @@ export type OtcCashInInput = {
   amount: Scalars['Float']['input'];
 };
 
-export type OneTimePasswordMutation = {
-  requestOTP: TelesignResultData;
-  unregisteredUserRequestOTP: TelesignResultData;
-  verifyOTP: TelesignVerifyResultData;
-};
-
-
-export type OneTimePasswordMutationRequestOtpArgs = {
-  mobileNumber?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type OneTimePasswordMutationUnregisteredUserRequestOtpArgs = {
-  mobileNumber?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type OneTimePasswordMutationVerifyOtpArgs = {
-  reference_id: Scalars['String']['input'];
-  verify_code: Scalars['String']['input'];
-};
-
 export type Organization = {
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  status?: Maybe<OrganizationStatus>;
+  type?: Maybe<OrganizationType>;
   updatedAt: Scalars['String']['output'];
+};
+
+export type OrganizationFees = {
+  flatRate: Scalars['Float']['output'];
+  surcharge: Scalars['Float']['output'];
+  type: PrincipalTransactionType;
+};
+
+export type OrganizationId = {
+  id: Scalars['ID']['output'];
 };
 
 export type OrganizationSortByInput = {
@@ -1045,9 +1180,32 @@ export enum OrganizationSortKeyType {
   Name = 'name'
 }
 
+export enum OrganizationStatus {
+  Activated = 'ACTIVATED',
+  Deactivated = 'DEACTIVATED'
+}
+
+export enum OrganizationType {
+  Corporation = 'CORPORATION',
+  Individual = 'INDIVIDUAL',
+  Partnership = 'PARTNERSHIP',
+  SoleProprietorship = 'SOLE_PROPRIETORSHIP'
+}
+
 export type OrganizationWalletOwner = {
   accountNumber: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type OrganizationWithFeesAndLimits = {
+  createdAt?: Maybe<Scalars['String']['output']>;
+  fees?: Maybe<Array<Maybe<OrganizationFees>>>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  status?: Maybe<OrganizationStatus>;
+  transactionLimits?: Maybe<TransactionLimits>;
+  type?: Maybe<OrganizationType>;
+  updatedAt?: Maybe<Scalars['String']['output']>;
 };
 
 export type OverTheCounterMutation = {
@@ -1072,11 +1230,29 @@ export type PayBillsInput = {
   referenceNumber: Scalars['String']['input'];
 };
 
+export type PaymentIntent = {
+  createdAt: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  organizationId: Scalars['String']['output'];
+  requestedAmount: Scalars['Float']['output'];
+  returnUrl: Scalars['String']['output'];
+  statementDescriptor?: Maybe<Scalars['String']['output']>;
+  status: MerchantPaymentStatus;
+  totalFees: Scalars['Float']['output'];
+};
+
 export enum PaymentMethodCode {
   Bank = 'BANK',
   Card = 'CARD',
   Ewallet = 'EWALLET'
 }
+
+export type PhoneContactAccountsInput = {
+  name: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  recordId: Scalars['String']['input'];
+};
 
 export type PinVerificationPayload = {
   expiresAt: Scalars['Int']['output'];
@@ -1123,8 +1299,17 @@ export type RegisterUserInput = {
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
   pin: Scalars['String']['input'];
   politicallyExposedPerson?: InputMaybe<Scalars['Boolean']['input']>;
+  salaryRange?: InputMaybe<Scalars['String']['input']>;
   sourceOfFunds?: InputMaybe<Scalars['String']['input']>;
   userProfilePicture?: InputMaybe<UserProfilePictureInput>;
+};
+
+export type RemoveFavoriteWalletData = {
+  id: Scalars['ID']['output'];
+};
+
+export type RemoveFavoriteWalletInput = {
+  id: Scalars['ID']['input'];
 };
 
 export type RenewAccessTokenPayload = {
@@ -1223,6 +1408,23 @@ export type SaveCryptoWalletInput = {
   walletAddress: Scalars['String']['input'];
 };
 
+export type SearchPhoneContactAccountsData = {
+  items: Array<SearchPhoneContactAccountsDataItem>;
+};
+
+export type SearchPhoneContactAccountsDataItem = {
+  accountNumber: Scalars['String']['output'];
+  alias: Scalars['String']['output'];
+  contactMobileNumber: Scalars['String']['output'];
+  contactName: Scalars['String']['output'];
+  displayName: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  mobileNumber: Scalars['String']['output'];
+  recordId: Scalars['String']['output'];
+  userProfilePicture?: Maybe<UserProfilePictureType>;
+};
+
 export type SearchWalletAccountsData = {
   items: Array<SearchWalletAccountsDataItem>;
 };
@@ -1230,7 +1432,9 @@ export type SearchWalletAccountsData = {
 export type SearchWalletAccountsDataItem = {
   accountNumber: Scalars['String']['output'];
   alias: Scalars['String']['output'];
+  displayName: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   mobileNumber: Scalars['String']['output'];
   userProfilePicture?: Maybe<UserProfilePictureType>;
 };
@@ -1239,6 +1443,28 @@ export enum SendMoneyProviderType {
   Instapay = 'instapay',
   Pesonet = 'pesonet'
 }
+
+export type SendSmsMutation = {
+  requestOTP: TelesignResultData;
+  unregisteredUserRequestOTP: TelesignResultData;
+  verifyOTP: TelesignVerifyResultData;
+};
+
+
+export type SendSmsMutationRequestOtpArgs = {
+  mobileNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SendSmsMutationUnregisteredUserRequestOtpArgs = {
+  mobileNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SendSmsMutationVerifyOtpArgs = {
+  reference_id: Scalars['String']['input'];
+  verify_code: Scalars['String']['input'];
+};
 
 export enum SortOrder {
   Asc = 'asc',
@@ -1263,6 +1489,17 @@ export type Transaction = {
   createdAt: Scalars['String']['output'];
   id: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+};
+
+export type TransactionLimits = {
+  incoming: TransactionLimitsByPeriod;
+  outgoing: TransactionLimitsByPeriod;
+  walletBalance: Scalars['Int']['output'];
+};
+
+export type TransactionLimitsByPeriod = {
+  daily: Scalars['Int']['output'];
+  monthly: Scalars['Int']['output'];
 };
 
 export type TransactionSortByInput = {
@@ -1313,6 +1550,15 @@ export type UpdateCryptoWalletData = {
   id: Scalars['String']['output'];
 };
 
+export type UpdateOrganizationData = {
+  organization: OrganizationId;
+};
+
+export type UpdateOrganizationInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<OrganizationType>;
+};
+
 export type UpdatePinData = {
   id: Scalars['String']['output'];
 };
@@ -1337,12 +1583,22 @@ export type UpdateUserInput = {
   middleName?: InputMaybe<Scalars['String']['input']>;
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
   politicallyExposedPerson?: InputMaybe<Scalars['Boolean']['input']>;
+  salaryRange?: InputMaybe<Scalars['String']['input']>;
   sourceOfFunds?: InputMaybe<Scalars['String']['input']>;
   userProfilePicture?: InputMaybe<UserProfilePictureInput>;
 };
 
 export type UpdateWalletAccountAliasData = {
   id: Scalars['String']['output'];
+};
+
+export type UpdateWalletAccountShowAliasData = {
+  id: Scalars['String']['output'];
+};
+
+export type UpdateWalletAccountShowAliasInput = {
+  accountNumber: Scalars['String']['input'];
+  showAlias: Scalars['Boolean']['input'];
 };
 
 export type User = {
@@ -1402,6 +1658,7 @@ export enum UserPermissionType {
   AdminView = 'ADMIN_VIEW',
   CreateOrganization = 'CREATE_ORGANIZATION',
   ExportData = 'EXPORT_DATA',
+  ManageOrganization = 'MANAGE_ORGANIZATION',
   OverTheCounterCashIn = 'OVER_THE_COUNTER_CASH_IN',
   OverTheCounterCashOut = 'OVER_THE_COUNTER_CASH_OUT',
   ReviewUserVerification = 'REVIEW_USER_VERIFICATION',
@@ -1428,6 +1685,7 @@ export type UserProfile = {
   middleName?: Maybe<Scalars['String']['output']>;
   mobileNumber?: Maybe<Scalars['String']['output']>;
   politicallyExposedPerson?: Maybe<Scalars['Boolean']['output']>;
+  salaryRange?: Maybe<Scalars['String']['output']>;
   sourceOfFunds?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['String']['output'];
   userId: Scalars['ID']['output'];
@@ -1451,7 +1709,9 @@ export type UserProfilePictureType = {
 export type UserProfileWalletOwner = {
   accountNumber: Scalars['String']['output'];
   alias?: Maybe<Scalars['String']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   middleName: Scalars['String']['output'];
   userId: Scalars['String']['output'];
@@ -1526,8 +1786,10 @@ export type WalletAccount = {
   accountNumber: Scalars['String']['output'];
   alias?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['String']['output'];
+  displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  showAlias?: Maybe<Scalars['Boolean']['output']>;
   type: WalletAccountType;
   updatedAt: Scalars['String']['output'];
 };
@@ -1569,8 +1831,24 @@ export type RequestExpressSendMutationVariables = Exact<{
 
 export type RequestExpressSendMutation = { currentUser: { requestExpressSend: { transaction: { id: string, sentAmount: number, availableBalance: number, createdAt: string } } } };
 
+export type ClearPaymentIntentMutationVariables = Exact<{
+  data: ClearPaymentIntentInput;
+}>;
+
+
+export type ClearPaymentIntentMutation = { currentUser: { clearPaymentIntent: { id: string, amount: number, fee: number, status: MerchantPaymentStatus, returnUrl: string } } };
+
+export type FetchPaymentIntentQueryVariables = Exact<{
+  paymentIntentId: Scalars['String']['input'];
+}>;
+
+
+export type FetchPaymentIntentQuery = { currentUser: { fetchPaymentIntent: { id: string, organizationId: string, requestedAmount: number, totalFees: number, description: string, statementDescriptor?: string | null, returnUrl: string, createdAt: string, status: MerchantPaymentStatus } } };
+
 
 export const GetCurrentUserDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCurrentUserDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUserDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"auth0UserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"middleName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"mobileNumber"}},{"kind":"Field","name":{"kind":"Name","value":"emailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"userProfilePicture"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profilePicture"}},{"kind":"Field","name":{"kind":"Name","value":"avatarType"}},{"kind":"Field","name":{"kind":"Name","value":"isUseAvatar"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCurrentUserDetailsQuery, GetCurrentUserDetailsQueryVariables>;
 export const FetchWalletAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchWalletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fetchWalletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"accountNumber"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FetchWalletAccountsQuery, FetchWalletAccountsQueryVariables>;
 export const VerifyPinDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"VerifyPin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pin"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyPin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}}]}}]}}]} as unknown as DocumentNode<VerifyPinMutation, VerifyPinMutationVariables>;
 export const RequestExpressSendDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestExpressSend"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestExpressSendInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestExpressSend"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transaction"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sentAmount"}},{"kind":"Field","name":{"kind":"Name","value":"availableBalance"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<RequestExpressSendMutation, RequestExpressSendMutationVariables>;
+export const ClearPaymentIntentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ClearPaymentIntent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ClearPaymentIntentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clearPaymentIntent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"fee"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"returnUrl"}}]}}]}}]}}]} as unknown as DocumentNode<ClearPaymentIntentMutation, ClearPaymentIntentMutationVariables>;
+export const FetchPaymentIntentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchPaymentIntent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"paymentIntentId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fetchPaymentIntent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"paymentIntentId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"paymentIntentId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"organizationId"}},{"kind":"Field","name":{"kind":"Name","value":"requestedAmount"}},{"kind":"Field","name":{"kind":"Name","value":"totalFees"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"statementDescriptor"}},{"kind":"Field","name":{"kind":"Name","value":"returnUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<FetchPaymentIntentQuery, FetchPaymentIntentQueryVariables>;

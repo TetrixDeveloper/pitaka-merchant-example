@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery } from '@tanstack/react-query';
+import { useAuth0 } from '@auth0/auth0-react';
 
-import { setAuthToken } from "graphQLClient";
+import { setAuthToken } from 'graphQLClient';
 import {
   fetchCurrentUserDetails,
   fetchCurrentUserWalletAccounts,
-} from "./services";
-import { authKeys } from "./keys";
+} from './services';
+import { authKeys } from './keys';
 
 export const useGetTokensQuery = () => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();

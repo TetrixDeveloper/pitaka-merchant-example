@@ -1,139 +1,186 @@
-import { ChangeEvent, useState } from "react";
-import { Button, Grid2, Stack, TextField, Typography } from "@mui/material";
-
-import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
-import { CURRENCY, formatCurrencyAmount } from "features/utils";
-import { useClearPaymentIntentMutation } from "./mutations";
-import { useQuery } from "@tanstack/react-query";
-import { getFetchPaymentIntentQuery } from "./queries";
-
-const amounts = ["100", "1000", "10000", "50000", "100000"];
-const TRANSACTION_FEE_PERCENT = Number(
-  process.env.REACT_APP_TRANSACTION_FEE_PERCENT
-);
-const TRANSACTION_FEE_MIN = Number(process.env.REACT_APP_TRANSACTION_FEE_MIN);
+import React from 'react';
+import { useEffect, useState } from 'react';
+import {
+  Button,
+  Typography,
+  Box,
+  Paper,
+  Checkbox,
+  FormControlLabel,
+  AppBar,
+  IconButton,
+  Container,
+  styled,
+} from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
+import { useGetCurrentUserWalletAccounts } from 'features/auth/queries';
+import { CURRENCY, formatCurrencyAmount } from 'features/utils';
+import { useClearPaymentIntentMutation } from './mutations';
+import { useQuery } from '@tanstack/react-query';
+import {
+  getFetchPaymentIntentQuery,
+  useGetWalletAccountBalanceQuery,
+} from './queries';
+import './CardMedia.css';
+import { useSnackbar } from 'notistack';
 
 function PayMerchant() {
+  const [agreed, setAgreed] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
   const { data: walletAccounts } = useGetCurrentUserWalletAccounts();
   const { mutateAsync, isPending } = useClearPaymentIntentMutation();
 
-  const paymentIntentId = window.location.pathname.split("/")?.[1];
+  const { data: activeAccountBalance } = useGetWalletAccountBalanceQuery(
+    walletAccounts?.[0]?.accountNumber
+  );
+
+  const paymentIntentId = window.location.pathname.split('/')?.[1];
   const { data: paymentIntent } = useQuery(
     getFetchPaymentIntentQuery(paymentIntentId)
   );
 
-  const [amount, setAmount] = useState("");
-  const [isCustom, setIsCustom] = useState(false);
   const [amountToPay, setAmountToPay] = useState(0);
-  const [transactionFee, setTransactionFee] = useState(TRANSACTION_FEE_MIN);
+  const [description, setDescription] = useState('');
 
-  const calculateFee = (amount: number) => {
-    const calculatedFee = amount * TRANSACTION_FEE_PERCENT;
-    return Math.max(calculatedFee, TRANSACTION_FEE_MIN);
-  };
-
-  const handleAmountButton = (amountItem: string) => {
-    const numericAmount = Number(amountItem);
-    const fee = calculateFee(numericAmount);
-    setAmount(amountItem);
-    setIsCustom(false);
-    setTransactionFee(fee);
-    setAmountToPay(numericAmount + fee);
-  };
-
-  const handleCustomButton = () => {
-    setAmount("");
-    setIsCustom(true);
-    setTransactionFee(TRANSACTION_FEE_MIN);
-    setAmountToPay(TRANSACTION_FEE_MIN);
-  };
-
-  const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const inputAmount = Number(event.target.value);
-    const fee = calculateFee(inputAmount);
-    setTransactionFee(fee);
-    setAmountToPay(inputAmount + fee);
-  };
+  useEffect(() => {
+    if (paymentIntent) {
+      setAmountToPay(paymentIntent?.requestedAmount || 0);
+      setDescription(paymentIntent?.description || '');
+    }
+  }, [paymentIntent]);
 
   const handlePayment = async () => {
     if (paymentIntent && walletAccounts?.[0]?.accountNumber) {
       try {
         await mutateAsync({
-          amount: amountToPay,
+          amount: paymentIntent.requestedAmount,
           senderAccountNumber: walletAccounts[0].accountNumber,
           paymentIntentId: paymentIntent.id,
         });
-        alert("Success!");
-        setAmount("");
-        setIsCustom(false);
-        setAmountToPay(0);
+
+        enqueueSnackbar('Successfully paid');
+
+        window.location.href = paymentIntent.returnUrl;
       } catch (error) {
-        alert("Error processing your transaction");
+        enqueueSnackbar(`Error processing your transaction: ${error}`, {
+          variant: 'error',
+        });
       }
     }
   };
 
-  console.log('walletsAccount', walletAccounts);
-  console.log(process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT);
+  const AmountText = styled(Typography)({
+    fontWeight: 500,
+    textAlign: 'right',
+  });
+
+  const PaymentRow = styled(Box)({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2,
+  });
+
+  if (!paymentIntent) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Stack spacing={2}>
-      <Stack flexDirection="row" mt="1em">
-        <Typography variant="h5">Merchant: </Typography>
-        <Typography variant="h5" color="#6b7280" pl={1}>
-          DWallet Technologies Inc.
-        </Typography>
-      </Stack>
-      <Stack flexDirection="row" mt="1em">
-        <Typography variant="h5">Amount: </Typography>
-        <Grid2>
-          {amounts.map((item, i) => (
-            <Button
-              variant={amount === item ? "contained" : "outlined"}
-              color="success"
-              key={`amount-${i}`}
-              sx={{ margin: 0.5 }}
-              onClick={() => handleAmountButton(item)}
-            >
-              {formatCurrencyAmount(Number(item), CURRENCY.PHP)}
-            </Button>
-          ))}
-          <Button
-            variant={isCustom ? "contained" : "outlined"}
-            color="success"
-            key={`amount-custom`}
-            sx={{ margin: 0.5 }}
-            onClick={handleCustomButton}
-          >
-            Custom
-          </Button>
-        </Grid2>
-      </Stack>
-      <Stack flexDirection="row" mt="1em">
-        <Typography variant="h5">
-          Fee: {formatCurrencyAmount(transactionFee, CURRENCY.PHP)}
-        </Typography>
-      </Stack>
-      {isCustom && (
-        <TextField
-          hiddenLabel
-          type="number"
-          id="custom-amount"
-          onChange={handleAmountChange}
-          variant="filled"
-          size="small"
-        />
-      )}
-      <Button
-        variant="contained"
-        onClick={handlePayment}
-        size="large"
-        sx={{ marginTop: 2 }}
-        disabled={!amountToPay || isPending}
-      >
-        Next
-      </Button>
-    </Stack>
+    <Container maxWidth="sm" sx={{ height: '150vh', bgcolor: '#f5f5f5', p: 0 }}>
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <AppBar position="static" sx={{ bgcolor: '#1a2b4b', pb: 40 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+            <IconButton edge="start" color="inherit" sx={{ mt: 0 }}>
+              <ArrowBack />
+            </IconButton>
+            <Typography variant="h6" sx={{ mt: 2, mb: 2, ml: 2 }}>
+              Pitaka Login
+            </Typography>
+          </Box>
+        </AppBar>
+
+        <Paper sx={{ p: 3, m: 2, mt: -40, borderRadius: 2 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Typography variant="h5" sx={{ mb: 1 }}>
+              Pitaka
+            </Typography>
+            <Typography variant="h4">{description}</Typography>
+          </Box>
+
+          <PaymentRow>
+            <Typography>Pay with</Typography>
+            <Typography>Pitaka</Typography>
+          </PaymentRow>
+
+          <PaymentRow>
+            <Typography>Available Balance</Typography>
+            <AmountText>
+              {formatCurrencyAmount(Number(activeAccountBalance), CURRENCY.PHP)}
+            </AmountText>
+          </PaymentRow>
+
+          <Typography variant="h6" sx={{ my: 3, textAlign: 'left' }}>
+            You are about to pay
+          </Typography>
+
+          <PaymentRow>
+            <Typography>Amount</Typography>
+            <AmountText>
+              {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+            </AmountText>
+          </PaymentRow>
+
+          <PaymentRow>
+            <Typography>Discount</Typography>
+            <Typography color="text.secondary">No available voucher</Typography>
+          </PaymentRow>
+
+          <PaymentRow sx={{ borderTop: '1px solid #eee', pt: 2, mb: 4 }}>
+            <Typography variant="h6">Total</Typography>
+            <Typography variant="h6">
+              {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+            </Typography>
+          </PaymentRow>
+        </Paper>
+
+        <Paper sx={{ p: 3, m: 2, mt: 1, mb: 17, borderRadius: 2 }}>
+          <Typography sx={{ mb: 2, textAlign: 'left' }}>
+            Confirmed transaction will be processed immediately and cannot be
+            reversed.
+          </Typography>
+
+          <FormControlLabel
+            sx={{ textAlign: 'left' }}
+            control={
+              <Checkbox
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+              />
+            }
+            label="I've reviewed the Pitaka details and agree to proceed using my crypto wallet."
+          />
+        </Paper>
+
+        <Button
+          variant="contained"
+          fullWidth
+          size="large"
+          onClick={handlePayment}
+          disabled={!walletAccounts || isPending || !agreed}
+          sx={{
+            bgcolor: '#5B7BA3',
+            py: 2,
+            borderRadius: 2,
+            '&:hover': {
+              bgcolor: '#4A6A92',
+            },
+          }}
+        >
+          Pay {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+        </Button>
+      </Box>
+    </Container>
   );
 }
 

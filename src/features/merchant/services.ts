@@ -1,10 +1,10 @@
-import graphQLClient from "graphQLClient";
+import graphQLClient from 'graphQLClient';
 
-import { graphql } from "__generated__/gql";
+import { graphql } from '__generated__/gql';
 import {
   ClearPaymentIntentInput,
   RequestExpressSendInput,
-} from "__generated__/gql/graphql";
+} from '__generated__/gql/graphql';
 
 const requestExpressSendDocument = graphql(`
   mutation RequestExpressSend($data: RequestExpressSendInput!) {
@@ -53,6 +53,33 @@ const fetchPaymentIntentDocument = graphql(`
   }
 `);
 
+const getWalletAccountsDocument = graphql(`
+  query FetchWalletAccounts {
+    currentUser {
+      fetchWalletAccounts {
+        walletAccounts {
+          id
+          accountNumber
+          type
+          name
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+`);
+
+const getWalletAccountBalanceDocument = graphql(`
+  query FetchWalletAccountBalance($accountNumber: String!) {
+    currentUser {
+      fetchWalletAccountBalance(accountNumber: $accountNumber) {
+        availableBalance
+      }
+    }
+  }
+`);
+
 export const requestExpressSend = async (data: RequestExpressSendInput) => {
   const result = await graphQLClient.request(requestExpressSendDocument, {
     data,
@@ -75,4 +102,16 @@ export const fetchPaymentIntent = async (paymentIntentId: string) => {
   });
 
   return result.currentUser.fetchPaymentIntent;
+};
+
+export const fetchWalletAccounts = async () => {
+  const result = await graphQLClient.request(getWalletAccountsDocument);
+  return result.currentUser.fetchWalletAccounts?.walletAccounts;
+};
+
+export const fetchWalletAccountBalance = async (accountNumber: string) => {
+  const result = await graphQLClient.request(getWalletAccountBalanceDocument, {
+    accountNumber,
+  });
+  return result.currentUser.fetchWalletAccountBalance?.availableBalance;
 };

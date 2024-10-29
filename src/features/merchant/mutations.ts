@@ -1,10 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { requestExpressSend, clearPaymentIntent } from "./services";
+import { requestExpressSend, clearPaymentIntent } from './services';
 import {
   ClearPaymentIntentInput,
   RequestExpressSendInput,
-} from "__generated__/gql/graphql";
+} from '__generated__/gql/graphql';
 
 export const useExpressSendMutation = () => {
   return useMutation({

@@ -1,5 +1,5 @@
-import graphQLClient from "graphQLClient";
-import { graphql } from "__generated__/gql";
+import graphQLClient from 'graphQLClient';
+import { graphql } from '__generated__/gql';
 
 const getCurrentUserDetailsDocument = graphql(`
   query GetCurrentUserDetails {

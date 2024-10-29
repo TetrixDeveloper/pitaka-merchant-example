@@ -1,13 +1,13 @@
-import getSymbolFromCurrency from "currency-symbol-map";
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 type FormatBalanceOptions = {
-  prefix?: "₱" | string;
+  prefix?: '₱' | string;
   decimalPlaces?: number;
 };
 
 export enum CURRENCY {
-  USD = "usd",
-  PHP = "php",
+  USD = 'usd',
+  PHP = 'php',
 }
 
 export type CurrencyType = CURRENCY | `${CURRENCY}`;
@@ -16,8 +16,8 @@ export const formatBalance = (
   balance?: number,
   options?: FormatBalanceOptions
 ): string => {
-  if (typeof balance !== "number") {
-    return "";
+  if (typeof balance !== 'number') {
+    return '';
   }
   const decimalPlaces = balance === 0 ? 0 : options?.decimalPlaces || 0;
   const formattedBalance =
@@ -27,12 +27,12 @@ export const formatBalance = (
   const validatedDecimalPlaces = Math.max(0, Math.min(4, decimalPlaces));
   const fractionDigits = formattedBalance >= 0 ? validatedDecimalPlaces : 2;
 
-  const formattedValue = formattedBalance.toLocaleString("en-US", {
+  const formattedValue = formattedBalance.toLocaleString('en-US', {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: 2,
   });
 
-  return `${options?.prefix || ""}${formattedValue}`;
+  return `${options?.prefix || ''}${formattedValue}`;
 };
 
 export const formatCurrencyAmount = (

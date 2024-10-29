@@ -1,25 +1,25 @@
-import { GraphQLClient } from "graphql-request";
+import { GraphQLClient } from 'graphql-request';
 
 const graphQLClient = new GraphQLClient(
-  process.env.REACT_APP_PITAKA_GRAPHQL_API_URL || ""
+  process.env.REACT_APP_PITAKA_GRAPHQL_API_URL || ''
 );
 
 export const setAuthToken = (tokenId: string) => {
-  graphQLClient.setHeader("Authorization", `Bearer ${tokenId}`);
-  graphQLClient.setHeader("Access-Control-Allow-Credentials", "true");
-  graphQLClient.setHeader("Access-Control-Allow-Origin", "*");
+  graphQLClient.setHeader('Authorization', `Bearer ${tokenId}`);
+  graphQLClient.setHeader('Access-Control-Allow-Credentials', 'true');
+  graphQLClient.setHeader('Access-Control-Allow-Origin', '*');
   graphQLClient.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,DELETE,PATCH,POST,PUT"
+    'Access-Control-Allow-Methods',
+    'GET,DELETE,PATCH,POST,PUT'
   );
   graphQLClient.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 };
 
 export const setPitakaToken = (token: string) => {
-  graphQLClient.setHeader("x-pitaka-token", token);
+  graphQLClient.setHeader('x-pitaka-token', token);
 };
 
 export default graphQLClient;

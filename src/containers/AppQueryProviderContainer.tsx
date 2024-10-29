@@ -1,8 +1,7 @@
-import React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-interface IAppQueryProviderContainer
-  extends React.ComponentPropsWithoutRef<"base"> {}
+type IAppQueryProviderContainer = React.ComponentPropsWithoutRef<'base'>;
 
 export const queryClient = new QueryClient();
 

@@ -2,20 +2,33 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  JSON: { input: any; output: any; }
-  Upload: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  JSON: { input: any; output: any };
+  Upload: { input: any; output: any };
 };
 
 export type ActivateOrganizationData = {
@@ -190,64 +203,53 @@ export type AdminMutation = {
   adminUpdateUserRole: AdminUpdateUserRoleData;
 };
 
-
 export type AdminMutationAdminActivateOrganizationArgs = {
   data: ActivateOrganizationInput;
   organizationId: Scalars['String']['input'];
 };
-
 
 export type AdminMutationAdminAddUserPermissionsArgs = {
   permissions: Array<UserPermissionType>;
   userId: Scalars['String']['input'];
 };
 
-
 export type AdminMutationAdminCreateOrganizationArgs = {
   data: CreateOrganizationInput;
 };
-
 
 export type AdminMutationAdminManageCryptoWalletAccessControlArgs = {
   cryptoWalletId: Scalars['String']['input'];
   isBlocked: Scalars['Boolean']['input'];
 };
 
-
 export type AdminMutationAdminManageOrganizationFeesArgs = {
   data: ManageOrganizationFeesInput;
   organizationId: Scalars['String']['input'];
 };
-
 
 export type AdminMutationAdminManageOrganizationTransactionLimitsArgs = {
   data: ManageOrganizationTransactionLimitsInput;
   organizationId: Scalars['String']['input'];
 };
 
-
 export type AdminMutationAdminRevokeUserPermissionsArgs = {
   permissions: Array<UserPermissionType>;
   userId: Scalars['String']['input'];
 };
 
-
 export type AdminMutationAdminUpdateCryptoWalletAmlScoreArgs = {
   cryptoWalletId: Scalars['String']['input'];
 };
-
 
 export type AdminMutationAdminUpdateOrganizationArgs = {
   data: UpdateOrganizationInput;
   organizationId: Scalars['String']['input'];
 };
 
-
 export type AdminMutationAdminUpdateUserDetailsArgs = {
   userData: UpdateUserInput;
   userId: Scalars['ID']['input'];
 };
-
 
 export type AdminMutationAdminUpdateUserRoleArgs = {
   role: UserRole;
@@ -284,7 +286,6 @@ export type AdminQuery = {
   adminGetUserPermissions: Array<GetUserPermissions>;
 };
 
-
 export type AdminQueryAdminFetchAdminLogsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
@@ -292,7 +293,6 @@ export type AdminQueryAdminFetchAdminLogsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
   typeFilter?: InputMaybe<Array<InputMaybe<UserLogType>>>;
 };
-
 
 export type AdminQueryAdminFetchAllTransactionsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -303,7 +303,6 @@ export type AdminQueryAdminFetchAllTransactionsArgs = {
   typeFilter?: InputMaybe<Array<InputMaybe<PrincipalTransactionType>>>;
 };
 
-
 export type AdminQueryAdminFetchAllUsersArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
@@ -312,11 +311,9 @@ export type AdminQueryAdminFetchAllUsersArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type AdminQueryAdminFetchCryptoTransactionReportArgs = {
   transactionReportId: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchCryptoTransactionReportsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -326,11 +323,9 @@ export type AdminQueryAdminFetchCryptoTransactionReportsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type AdminQueryAdminFetchCryptoWalletDetailsArgs = {
   walletAddress: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchCryptoWalletsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -340,11 +335,9 @@ export type AdminQueryAdminFetchCryptoWalletsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type AdminQueryAdminFetchOrganizationByIdArgs = {
   organizationId: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchOrganizationsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -353,31 +346,25 @@ export type AdminQueryAdminFetchOrganizationsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type AdminQueryAdminFetchTransactionDetailsArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchUserAccountLimitsArgs = {
   userId: Scalars['String']['input'];
 };
 
-
 export type AdminQueryAdminFetchUserCryptoWalletsArgs = {
   userId: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchUserDetailsArgs = {
   userId: Scalars['String']['input'];
 };
 
-
 export type AdminQueryAdminFetchUserLatestVerificationArgs = {
   userId: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchUserLogsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -387,11 +374,9 @@ export type AdminQueryAdminFetchUserLogsArgs = {
   typeFilter?: InputMaybe<Array<InputMaybe<UserLogType>>>;
 };
 
-
 export type AdminQueryAdminFetchUserVerificationArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminFetchUserVerificationsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -400,16 +385,13 @@ export type AdminQueryAdminFetchUserVerificationsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type AdminQueryAdminFetchUserWalletAccountsArgs = {
   userId: Scalars['String']['input'];
 };
 
-
 export type AdminQueryAdminFetchWalletAccountBalanceArgs = {
   accountNumber: Scalars['String']['input'];
 };
-
 
 export type AdminQueryAdminGetUserPermissionsArgs = {
   userId: Scalars['String']['input'];
@@ -521,16 +503,13 @@ export type BillersQuery = {
   fetchOtherCharges: FetchOtherChargesData;
 };
 
-
 export type BillersQueryFetchBillerOtherInfoParametersArgs = {
   billerCode: Scalars['String']['input'];
 };
 
-
 export type BillersQueryFetchBillersByCategoryArgs = {
   category: Scalars['String']['input'];
 };
-
 
 export type BillersQueryFetchOtherChargesArgs = {
   billerCode: Scalars['String']['input'];
@@ -558,7 +537,7 @@ export type CardDetailsInput = {
 
 export enum CashOutProviderType {
   Paycools = 'Paycools',
-  Paymongo = 'Paymongo'
+  Paymongo = 'Paymongo',
 }
 
 export type CheckBiometricData = {
@@ -583,7 +562,7 @@ export enum CivilStatus {
   Married = 'MARRIED',
   Separated = 'SEPARATED',
   Single = 'SINGLE',
-  Widowed = 'WIDOWED'
+  Widowed = 'WIDOWED',
 }
 
 export type ClearPaymentIntentData = {
@@ -653,7 +632,7 @@ export enum CryptoTransactionStatus {
   New = 'NEW',
   Processing = 'PROCESSING',
   Scheduled = 'SCHEDULED',
-  ToClose = 'TO_CLOSE'
+  ToClose = 'TO_CLOSE',
 }
 
 export type CryptoTransactionTransferData = {
@@ -673,7 +652,7 @@ export type CryptoTransactionsSortByInput = {
 
 export enum CryptoTransactionsSortKeyType {
   CreatedAt = 'createdAt',
-  Id = 'id'
+  Id = 'id',
 }
 
 export type CryptoWallet = {
@@ -718,14 +697,14 @@ export type CryptoWalletData = {
 export enum CryptoWalletRiskLevel {
   High = 'HIGH',
   Low = 'LOW',
-  Medium = 'MEDIUM'
+  Medium = 'MEDIUM',
 }
 
 export enum CryptoWalletType {
   Bnb = 'BNB',
   Btc = 'BTC',
   Eth = 'ETH',
-  Matic = 'MATIC'
+  Matic = 'MATIC',
 }
 
 export type CryptoWalletsSortByInput = {
@@ -738,7 +717,7 @@ export enum CryptoWalletsSortKeyType {
   Id = 'id',
   RiskLevel = 'riskLevel',
   UserId = 'userId',
-  WalletAddress = 'walletAddress'
+  WalletAddress = 'walletAddress',
 }
 
 export type CurrentUserMutation = {
@@ -769,123 +748,99 @@ export type CurrentUserMutation = {
   verifyPin: PinVerificationPayload;
 };
 
-
 export type CurrentUserMutationActivateCryptoWalletArgs = {
   type: CryptoWalletType;
   walletAddress: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationCheckBiometricArgs = {
   biometric?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type CurrentUserMutationCheckWalletAccountAliasArgs = {
   alias: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationClearPaymentIntentArgs = {
   data: ClearPaymentIntentInput;
 };
-
 
 export type CurrentUserMutationCreateFavoriteWalletArgs = {
   data: CreateFavoriteWalletInput;
 };
 
-
 export type CurrentUserMutationCreateVerificationArgs = {
   data: CreateVerificationInput;
 };
-
 
 export type CurrentUserMutationGenerateStaticQrphCodeArgs = {
   accountNumber: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationPayBillsArgs = {
   data: PayBillsInput;
 };
-
 
 export type CurrentUserMutationRegisterUserArgs = {
   userData?: InputMaybe<RegisterUserInput>;
 };
 
-
 export type CurrentUserMutationRemoveFavoriteWalletArgs = {
   data: RemoveFavoriteWalletInput;
 };
-
 
 export type CurrentUserMutationRenewAccessTokenArgs = {
   refreshToken: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationRequestCashInArgs = {
   data: RequestCashInInput;
 };
-
 
 export type CurrentUserMutationRequestCashOutArgs = {
   data: RequestCashOutInput;
 };
 
-
 export type CurrentUserMutationRequestExpressSendArgs = {
   data: RequestExpressSendInput;
 };
-
 
 export type CurrentUserMutationSaveBiometricArgs = {
   biometric: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationSaveCryptoTransactionArgs = {
   data: SaveCryptoTransactionInput;
 };
-
 
 export type CurrentUserMutationSaveCryptoWalletArgs = {
   data: SaveCryptoWalletInput;
 };
 
-
 export type CurrentUserMutationUpdateCryptoWalletBalanceArgs = {
   data: UpdateCryptoWalletBalanceInput;
 };
-
 
 export type CurrentUserMutationUpdatePinArgs = {
   data: UpdatePinInput;
 };
 
-
 export type CurrentUserMutationUpdateUserArgs = {
   userData: UpdateUserInput;
 };
-
 
 export type CurrentUserMutationUpdateWalletAccountAliasArgs = {
   accountNumber: Scalars['String']['input'];
   alias: Scalars['String']['input'];
 };
 
-
 export type CurrentUserMutationUpdateWalletAccountShowAliasArgs = {
   data: UpdateWalletAccountShowAliasInput;
 };
 
-
 export type CurrentUserMutationVerifyBiometricArgs = {
   sign: Scalars['String']['input'];
 };
-
 
 export type CurrentUserMutationVerifyPinArgs = {
   pin: Scalars['String']['input'];
@@ -910,43 +865,35 @@ export type CurrentUserQuery = {
   searchWalletAccounts: SearchWalletAccountsData;
 };
 
-
 export type CurrentUserQueryCheckCryptoWalletArgs = {
   type: CryptoWalletType;
   walletAddress: Scalars['String']['input'];
 };
 
-
 export type CurrentUserQueryCheckExistingNumberArgs = {
   mobileNumber: Scalars['String']['input'];
 };
-
 
 export type CurrentUserQueryFetchCryptoWalletArgs = {
   type: CryptoWalletType;
   walletAddress: Scalars['String']['input'];
 };
 
-
 export type CurrentUserQueryFetchFavoriteWalletsArgs = {
   walletAccountId: Scalars['String']['input'];
 };
-
 
 export type CurrentUserQueryFetchPaymentIntentArgs = {
   paymentIntentId: Scalars['String']['input'];
 };
 
-
 export type CurrentUserQueryFetchTransactionSumsByPeriodArgs = {
   accountNumber: Scalars['String']['input'];
 };
 
-
 export type CurrentUserQueryFetchUserTransactionDetailsArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type CurrentUserQueryFetchUserTransactionsArgs = {
   continuationToken?: InputMaybe<Scalars['String']['input']>;
@@ -954,16 +901,13 @@ export type CurrentUserQueryFetchUserTransactionsArgs = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type CurrentUserQueryFetchWalletAccountBalanceArgs = {
   accountNumber: Scalars['String']['input'];
 };
 
-
 export type CurrentUserQuerySearchPhoneContactAccountsArgs = {
   data: Array<PhoneContactAccountsInput>;
 };
-
 
 export type CurrentUserQuerySearchWalletAccountsArgs = {
   query: Scalars['String']['input'];
@@ -1046,7 +990,7 @@ export type FetchUserTransactionDetailsData = {
 
 export enum Gender {
   Female = 'FEMALE',
-  Male = 'MALE'
+  Male = 'MALE',
 }
 
 export type GenerateStaticQrphCodeData = {
@@ -1109,7 +1053,7 @@ export type ManageOrganizationTransactionLimitsInput = {
 export enum MerchantPaymentStatus {
   AwaitingNextAction = 'AWAITING_NEXT_ACTION',
   Processing = 'PROCESSING',
-  Succeeded = 'SUCCEEDED'
+  Succeeded = 'SUCCEEDED',
 }
 
 export type Mutation = {
@@ -1123,24 +1067,20 @@ export type Mutation = {
   transactions: TransactionsMutation;
 };
 
-
 export type MutationApproveReviewVerificationArgs = {
   comment?: InputMaybe<Scalars['String']['input']>;
   consensus: ReviewConsensus;
   verificationId: Scalars['String']['input'];
 };
 
-
 export type MutationCreateWalletAccountArgs = {
   walletAccountData?: InputMaybe<CreateWalletAccountInput>;
 };
-
 
 export type MutationStartReviewVerificationArgs = {
   comment?: InputMaybe<Scalars['String']['input']>;
   verificationId: Scalars['String']['input'];
 };
-
 
 export type MutationSubmitUserVerificationArgs = {
   identityVerificationId: Scalars['String']['input'];
@@ -1177,19 +1117,19 @@ export type OrganizationSortByInput = {
 
 export enum OrganizationSortKeyType {
   CreatedAt = 'createdAt',
-  Name = 'name'
+  Name = 'name',
 }
 
 export enum OrganizationStatus {
   Activated = 'ACTIVATED',
-  Deactivated = 'DEACTIVATED'
+  Deactivated = 'DEACTIVATED',
 }
 
 export enum OrganizationType {
   Corporation = 'CORPORATION',
   Individual = 'INDIVIDUAL',
   Partnership = 'PARTNERSHIP',
-  SoleProprietorship = 'SOLE_PROPRIETORSHIP'
+  SoleProprietorship = 'SOLE_PROPRIETORSHIP',
 }
 
 export type OrganizationWalletOwner = {
@@ -1211,7 +1151,6 @@ export type OrganizationWithFeesAndLimits = {
 export type OverTheCounterMutation = {
   cashIn?: Maybe<Transaction>;
 };
-
 
 export type OverTheCounterMutationCashInArgs = {
   payload?: InputMaybe<OtcCashInInput>;
@@ -1245,7 +1184,7 @@ export type PaymentIntent = {
 export enum PaymentMethodCode {
   Bank = 'BANK',
   Card = 'CARD',
-  Ewallet = 'EWALLET'
+  Ewallet = 'EWALLET',
 }
 
 export type PhoneContactAccountsInput = {
@@ -1262,7 +1201,7 @@ export type PinVerificationPayload = {
 export enum PrincipalTransactionStatus {
   Complete = 'COMPLETE',
   Failed = 'FAILED',
-  Pending = 'PENDING'
+  Pending = 'PENDING',
 }
 
 export enum PrincipalTransactionType {
@@ -1271,7 +1210,7 @@ export enum PrincipalTransactionType {
   OnlineBankCashIn = 'ONLINE_BANK_CASH_IN',
   OnlineBankCashOut = 'ONLINE_BANK_CASH_OUT',
   OverTheCounterCashIn = 'OVER_THE_COUNTER_CASH_IN',
-  OverTheCounterCashOut = 'OVER_THE_COUNTER_CASH_OUT'
+  OverTheCounterCashOut = 'OVER_THE_COUNTER_CASH_OUT',
 }
 
 export type Query = {
@@ -1281,7 +1220,6 @@ export type Query = {
   transactions: TransactionsQuery;
   walletAccount?: Maybe<WalletAccount>;
 };
-
 
 export type QueryWalletAccountArgs = {
   id: Scalars['ID']['input'];
@@ -1367,20 +1305,20 @@ export type RequestExpressSendInput = {
 export enum ReviewConsensus {
   Approved = 'APPROVED',
   PartiallyApproved = 'PARTIALLY_APPROVED',
-  Rejected = 'REJECTED'
+  Rejected = 'REJECTED',
 }
 
 export enum ReviewStatus {
   Active = 'ACTIVE',
   Done = 'DONE',
   Draft = 'DRAFT',
-  Submitted = 'SUBMITTED'
+  Submitted = 'SUBMITTED',
 }
 
 export enum RiskLevelType {
   High = 'HIGH',
   Low = 'LOW',
-  Medium = 'MEDIUM'
+  Medium = 'MEDIUM',
 }
 
 export type SaveBiometricData = {
@@ -1441,7 +1379,7 @@ export type SearchWalletAccountsDataItem = {
 
 export enum SendMoneyProviderType {
   Instapay = 'instapay',
-  Pesonet = 'pesonet'
+  Pesonet = 'pesonet',
 }
 
 export type SendSmsMutation = {
@@ -1450,16 +1388,13 @@ export type SendSmsMutation = {
   verifyOTP: TelesignVerifyResultData;
 };
 
-
 export type SendSmsMutationRequestOtpArgs = {
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type SendSmsMutationUnregisteredUserRequestOtpArgs = {
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type SendSmsMutationVerifyOtpArgs = {
   reference_id: Scalars['String']['input'];
@@ -1468,7 +1403,7 @@ export type SendSmsMutationVerifyOtpArgs = {
 
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }
 
 export type SupportedToken = {
@@ -1510,7 +1445,7 @@ export type TransactionSortByInput = {
 export enum TransactionSortKeyType {
   Amount = 'amount',
   CreatedAt = 'createdAt',
-  Id = 'id'
+  Id = 'id',
 }
 
 export enum TransactionType {
@@ -1525,7 +1460,7 @@ export enum TransactionType {
   OverTheCounterCashInCompleted = 'OVER_THE_COUNTER_CASH_IN_COMPLETED',
   OverTheCounterCashInInitiated = 'OVER_THE_COUNTER_CASH_IN_INITIATED',
   OverTheCounterCashOutCompleted = 'OVER_THE_COUNTER_CASH_OUT_COMPLETED',
-  OverTheCounterCashOutInitiated = 'OVER_THE_COUNTER_CASH_OUT_INITIATED'
+  OverTheCounterCashOutInitiated = 'OVER_THE_COUNTER_CASH_OUT_INITIATED',
 }
 
 export type TransactionsMutation = {
@@ -1638,7 +1573,7 @@ export enum UserLogType {
   RejectUser = 'REJECT_USER',
   RevokePermission = 'REVOKE_PERMISSION',
   UpdateRole = 'UPDATE_ROLE',
-  UpdateUser = 'UPDATE_USER'
+  UpdateUser = 'UPDATE_USER',
 }
 
 export type UserLogsSortByInput = {
@@ -1650,7 +1585,7 @@ export enum UserLogsSortKeyType {
   AdminUser = 'adminUser',
   CreatedAt = 'createdAt',
   Id = 'id',
-  User = 'user'
+  User = 'user',
 }
 
 export enum UserPermissionType {
@@ -1670,7 +1605,7 @@ export enum UserPermissionType {
   ViewDashboard = 'VIEW_DASHBOARD',
   ViewOrganization = 'VIEW_ORGANIZATION',
   ViewTransactions = 'VIEW_TRANSACTIONS',
-  ViewWalletDetails = 'VIEW_WALLET_DETAILS'
+  ViewWalletDetails = 'VIEW_WALLET_DETAILS',
 }
 
 export type UserProfile = {
@@ -1728,7 +1663,7 @@ export enum UserRole {
   CsLevel_4 = 'CS_LEVEL_4',
   SuperAdmin = 'SUPER_ADMIN',
   System = 'SYSTEM',
-  User = 'USER'
+  User = 'USER',
 }
 
 export type UserSortByInput = {
@@ -1740,7 +1675,7 @@ export enum UserSortKeyType {
   CreatedAt = 'createdAt',
   EmailAddress = 'emailAddress',
   LastName = 'lastName',
-  UserId = 'userId'
+  UserId = 'userId',
 }
 
 export type UserVerification = {
@@ -1761,7 +1696,7 @@ export type UserVerificationSortByInput = {
 };
 
 export enum UserVerificationSortKeyType {
-  CreatedAt = 'createdAt'
+  CreatedAt = 'createdAt',
 }
 
 export enum UserVerificationStatus {
@@ -1769,7 +1704,7 @@ export enum UserVerificationStatus {
   Pending = 'PENDING',
   SemiVerified = 'SEMI_VERIFIED',
   Unverified = 'UNVERIFIED',
-  Verified = 'VERIFIED'
+  Verified = 'VERIFIED',
 }
 
 export type UserWhereUniqueInput = {
@@ -1794,11 +1729,13 @@ export type WalletAccount = {
   updatedAt: Scalars['String']['output'];
 };
 
-export type WalletAccountOwnerUnion = OrganizationWalletOwner | UserProfileWalletOwner;
+export type WalletAccountOwnerUnion =
+  | OrganizationWalletOwner
+  | UserProfileWalletOwner;
 
 export enum WalletAccountType {
   Individual = 'INDIVIDUAL',
-  Organization = 'ORGANIZATION'
+  Organization = 'ORGANIZATION',
 }
 
 export type WalletUserProfilePictureType = {
@@ -1807,48 +1744,683 @@ export type WalletUserProfilePictureType = {
   profilePicture?: Maybe<Scalars['String']['output']>;
 };
 
-export type GetCurrentUserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCurrentUserDetailsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
+export type GetCurrentUserDetailsQuery = {
+  currentUser: {
+    getCurrentUserDetails: {
+      id: string;
+      displayName: string;
+      auth0UserId: string;
+      createdAt: string;
+      profile?: {
+        id: string;
+        userId: string;
+        firstName: string;
+        middleName?: string | null;
+        lastName: string;
+        mobileNumber?: string | null;
+        emailAddress: string;
+        userProfilePicture?: {
+          profilePicture?: string | null;
+          avatarType?: string | null;
+          isUseAvatar?: boolean | null;
+        } | null;
+      } | null;
+    };
+  };
+};
 
-export type GetCurrentUserDetailsQuery = { currentUser: { getCurrentUserDetails: { id: string, displayName: string, auth0UserId: string, createdAt: string, profile?: { id: string, userId: string, firstName: string, middleName?: string | null, lastName: string, mobileNumber?: string | null, emailAddress: string, userProfilePicture?: { profilePicture?: string | null, avatarType?: string | null, isUseAvatar?: boolean | null } | null } | null } } };
+export type FetchWalletAccountsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FetchWalletAccountsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FetchWalletAccountsQuery = { currentUser: { fetchWalletAccounts: { walletAccounts: Array<{ id: string, accountNumber: string, type: WalletAccountType, name: string, createdAt: string, updatedAt: string }> } } };
+export type FetchWalletAccountsQuery = {
+  currentUser: {
+    fetchWalletAccounts: {
+      walletAccounts: Array<{
+        id: string;
+        accountNumber: string;
+        type: WalletAccountType;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+    };
+  };
+};
 
 export type VerifyPinMutationVariables = Exact<{
   pin: Scalars['String']['input'];
 }>;
 
-
-export type VerifyPinMutation = { currentUser: { verifyPin: { token: string, expiresAt: number } } };
+export type VerifyPinMutation = {
+  currentUser: { verifyPin: { token: string; expiresAt: number } };
+};
 
 export type RequestExpressSendMutationVariables = Exact<{
   data: RequestExpressSendInput;
 }>;
 
-
-export type RequestExpressSendMutation = { currentUser: { requestExpressSend: { transaction: { id: string, sentAmount: number, availableBalance: number, createdAt: string } } } };
+export type RequestExpressSendMutation = {
+  currentUser: {
+    requestExpressSend: {
+      transaction: {
+        id: string;
+        sentAmount: number;
+        availableBalance: number;
+        createdAt: string;
+      };
+    };
+  };
+};
 
 export type ClearPaymentIntentMutationVariables = Exact<{
   data: ClearPaymentIntentInput;
 }>;
 
-
-export type ClearPaymentIntentMutation = { currentUser: { clearPaymentIntent: { id: string, amount: number, fee: number, status: MerchantPaymentStatus, returnUrl: string } } };
+export type ClearPaymentIntentMutation = {
+  currentUser: {
+    clearPaymentIntent: {
+      id: string;
+      amount: number;
+      fee: number;
+      status: MerchantPaymentStatus;
+      returnUrl: string;
+    };
+  };
+};
 
 export type FetchPaymentIntentQueryVariables = Exact<{
   paymentIntentId: Scalars['String']['input'];
 }>;
 
+export type FetchPaymentIntentQuery = {
+  currentUser: {
+    fetchPaymentIntent: {
+      id: string;
+      organizationId: string;
+      requestedAmount: number;
+      totalFees: number;
+      description: string;
+      statementDescriptor?: string | null;
+      returnUrl: string;
+      createdAt: string;
+      status: MerchantPaymentStatus;
+    };
+  };
+};
 
-export type FetchPaymentIntentQuery = { currentUser: { fetchPaymentIntent: { id: string, organizationId: string, requestedAmount: number, totalFees: number, description: string, statementDescriptor?: string | null, returnUrl: string, createdAt: string, status: MerchantPaymentStatus } } };
+export const GetCurrentUserDetailsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetCurrentUserDetails' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'getCurrentUserDetails' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'auth0UserId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'profile' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'firstName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'middleName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'lastName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'mobileNumber' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'emailAddress' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'userProfilePicture',
+                              },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'profilePicture',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'avatarType' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'isUseAvatar',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetCurrentUserDetailsQuery,
+  GetCurrentUserDetailsQueryVariables
+>;
+export const FetchWalletAccountsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchWalletAccounts' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'fetchWalletAccounts' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'walletAccounts' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'accountNumber' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'type' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'createdAt' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'updatedAt' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchWalletAccountsQuery,
+  FetchWalletAccountsQueryVariables
+>;
 
+export const FetchWalletAccountBalanceDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchWalletAccountBalance' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'accountNumber' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'fetchWalletAccountBalance' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'accountNumber' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'accountNumber' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'availableBalance' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchWalletAccountBalanceQuery,
+  FetchWalletAccountBalanceQueryVariables
+>;
+export type FetchWalletAccountBalanceQueryVariables = Exact<{
+  accountNumber: Scalars['String']['input'];
+}>;
 
-export const GetCurrentUserDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCurrentUserDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUserDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"auth0UserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"middleName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"mobileNumber"}},{"kind":"Field","name":{"kind":"Name","value":"emailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"userProfilePicture"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profilePicture"}},{"kind":"Field","name":{"kind":"Name","value":"avatarType"}},{"kind":"Field","name":{"kind":"Name","value":"isUseAvatar"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCurrentUserDetailsQuery, GetCurrentUserDetailsQueryVariables>;
-export const FetchWalletAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchWalletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fetchWalletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"accountNumber"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FetchWalletAccountsQuery, FetchWalletAccountsQueryVariables>;
-export const VerifyPinDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"VerifyPin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pin"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyPin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}}]}}]}}]} as unknown as DocumentNode<VerifyPinMutation, VerifyPinMutationVariables>;
-export const RequestExpressSendDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestExpressSend"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestExpressSendInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestExpressSend"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transaction"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sentAmount"}},{"kind":"Field","name":{"kind":"Name","value":"availableBalance"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<RequestExpressSendMutation, RequestExpressSendMutationVariables>;
-export const ClearPaymentIntentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ClearPaymentIntent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ClearPaymentIntentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clearPaymentIntent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"fee"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"returnUrl"}}]}}]}}]}}]} as unknown as DocumentNode<ClearPaymentIntentMutation, ClearPaymentIntentMutationVariables>;
-export const FetchPaymentIntentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchPaymentIntent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"paymentIntentId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fetchPaymentIntent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"paymentIntentId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"paymentIntentId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"organizationId"}},{"kind":"Field","name":{"kind":"Name","value":"requestedAmount"}},{"kind":"Field","name":{"kind":"Name","value":"totalFees"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"statementDescriptor"}},{"kind":"Field","name":{"kind":"Name","value":"returnUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<FetchPaymentIntentQuery, FetchPaymentIntentQueryVariables>;
+export type FetchWalletAccountBalanceQuery = {
+  currentUser: { fetchWalletAccountBalance: { availableBalance: number } };
+};
+
+export const VerifyPinDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'VerifyPin' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'pin' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'verifyPin' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'pin' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'pin' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'token' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'expiresAt' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VerifyPinMutation, VerifyPinMutationVariables>;
+export const RequestExpressSendDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RequestExpressSend' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'RequestExpressSendInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'requestExpressSend' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'data' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'data' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'transaction' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'sentAmount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'availableBalance' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'createdAt' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RequestExpressSendMutation,
+  RequestExpressSendMutationVariables
+>;
+export const ClearPaymentIntentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ClearPaymentIntent' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'ClearPaymentIntentInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'clearPaymentIntent' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'data' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'data' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'amount' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'fee' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'status' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'returnUrl' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClearPaymentIntentMutation,
+  ClearPaymentIntentMutationVariables
+>;
+export const FetchPaymentIntentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchPaymentIntent' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'paymentIntentId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'fetchPaymentIntent' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'paymentIntentId' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'paymentIntentId' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'organizationId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'requestedAmount' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalFees' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'statementDescriptor' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'returnUrl' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'status' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchPaymentIntentQuery,
+  FetchPaymentIntentQueryVariables
+>;

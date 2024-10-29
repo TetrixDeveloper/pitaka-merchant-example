@@ -29,6 +29,7 @@ function Main({ auth0 }: MainProps) {
   const { logout } = useAuth0();
 
   const handleLogout = () => {
+    localStorage.clear();
     logout({ openUrl: false });
   };
 

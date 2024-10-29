@@ -25,7 +25,7 @@ function PinInput() {
         <TextField
           value={pin}
           hiddenLabel
-          type="text"
+          type="password"
           id="pin-input"
           variant="outlined"
           size="small"

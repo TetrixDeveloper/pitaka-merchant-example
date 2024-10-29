@@ -1,7 +1,28 @@
+import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Stack, Typography } from "@mui/material";
 
 function Login() {
+
+  const [pending, setPending] = useState(true);
+  useEffect(() => {
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const idParam = searchParams.get('id');
+    const returnUrlParam = searchParams.get('returnUrl');
+    const amountParam = searchParams.get('amount');
+    const descriptionParam = searchParams.get('description');
+    if (amountParam) 
+    {
+      setPending(false);
+      const url = process.env.REACT_APP_AUTH0_REDIRECT_URI+`/?id=${idParam}&amount=${amountParam}&description=${descriptionParam}&returnUrl=${returnUrlParam}`;
+      localStorage.setItem('transactionUrl', url);
+    }
+
+  }, []);
+
+
+
   const { loginWithRedirect } = useAuth0();
 
   const handleLoginWithGoogle = async () => await loginWithRedirect();
@@ -34,6 +55,7 @@ function Login() {
           margin: 4,
           padding: 1.5,
         }}
+        disabled={pending}
       >
         Single Sign-On (SSO)
       </Button>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { Button, Typography, Box, Card, CardContent } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Stack, Typography } from "@mui/material";
 
 function Login() {
 
@@ -28,38 +28,36 @@ function Login() {
   const handleLoginWithGoogle = async () => await loginWithRedirect();
 
   return (
-    <Stack
-      alignItems="center"
+    <Box
       sx={{
-        "& .MuiTextField-root": {
-          margin: 2,
-          width: "300px",
-        },
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#0f1e33',
+        padding: 2,
+        border: '3px solid #0f1e33',  
+        borderRadius: '8px', 
       }}
     >
-      <Typography
-        variant="h6"
-        gutterBottom
-        color="#6b7280"
-        mt="1em"
-        textAlign="center"
-      >
-        Connect your Pitaka account to sign in.
-      </Typography>
-      <Button
-        variant="contained"
-        onClick={handleLoginWithGoogle}
-        size="large"
-        sx={{
-          width: "300px",
-          margin: 4,
-          padding: 1.5,
-        }}
-        disabled={pending}
-      >
-        Single Sign-On (SSO)
-      </Button>
-    </Stack>
+      <Card sx={{ maxWidth: 400, backgroundColor: '#e8f1fa', padding: 2 }}>
+        <CardContent>
+        <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
+          Connect your Pitaka account to sign in.
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+          <Button
+            variant="contained" color="primary"
+            onClick={handleLoginWithGoogle}
+            
+            disabled={pending}
+          >
+            Single Sign-On (SSO)
+          </Button>
+          </Box>
+      </CardContent>
+      </Card>
+    </Box>
   );
 }
 

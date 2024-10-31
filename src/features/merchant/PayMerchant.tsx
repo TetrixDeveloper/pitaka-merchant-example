@@ -1,16 +1,13 @@
 import {  useEffect, useState } from "react";
-import { Button, Stack, Typography } from "@mui/material";
-
+import { Button, Stack, Typography, Box, Card, CardContent, Divider, Checkbox, FormControlLabel, Avatar, CardMedia } from "@mui/material";
+import MerchantIcon from 'assets/Confirmation.svg'
 import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
 import { CURRENCY, formatCurrencyAmount } from "features/utils";
 import { useClearPaymentIntentMutation } from "./mutations";
 import { useQuery } from "@tanstack/react-query";
 import { getFetchPaymentIntentQuery } from "./queries";
+import './CardMedia.css'
 
-const TRANSACTION_FEE_PERCENT = Number(
-  process.env.REACT_APP_TRANSACTION_FEE_PERCENT
-);
-const TRANSACTION_FEE_MIN = Number(process.env.REACT_APP_TRANSACTION_FEE_MIN);
 
 function PayMerchant() {
 
@@ -19,7 +16,8 @@ function PayMerchant() {
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const [returnUrl, setReturnUrl] = useState("");
   const [amountToPay, setAmountToPay] = useState(0);
-  const [transactionFee, setTransactionFee] = useState(TRANSACTION_FEE_MIN);
+  const [isChecked, setIsChecked] = useState(false);
+
   
   useEffect(() => {
 
@@ -39,8 +37,6 @@ function PayMerchant() {
         setPaymentIntentId(idParam ?? '');
         setReturnUrl(returnUrlParam ?? '');
         setDescription(descriptionParam);
-        const fee = calculateFee(Number(amountParam));
-        setTransactionFee(fee);
         setAmountToPay(Number(amountParam));
       }
     }
@@ -58,10 +54,6 @@ function PayMerchant() {
   );
 
 
-  const calculateFee = (amount: number) => {
-    const calculatedFee = amount * TRANSACTION_FEE_PERCENT;
-    return Math.max(calculatedFee, TRANSACTION_FEE_MIN);
-  };
 
 
 
@@ -90,41 +82,116 @@ function PayMerchant() {
   console.log(process.env.REACT_APP_DTAKA_TEMP_WALLET_ACCOUNT);
 
   return (
-    <Stack spacing={2}>
-      <Stack flexDirection="row" mt="1em">
-        <Typography variant="h5">Merchant: </Typography>
-        <Typography variant="h5" color="#6b7280" pl={1}>
-          DWallet Technologies Inc.
-        </Typography>
-      </Stack>
-      <Stack flexDirection="row" mt="1em">
-      <Typography variant="h5">Order:{description} </Typography>
-      </Stack>
-      
-       
 
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: 'none',
+      }}
+    >
+      <Card sx={{ width: 350, borderRadius: 2, boxShadow: 3, backgroundColor: '#e8f1fa' }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
 
-      <Stack flexDirection="row" mt="1em">
-        <Typography variant="h5">
-          Fee: {transactionFee}
-        </Typography>
-      </Stack>
+            <Typography variant="subtitle1" sx={{ ml: 2 }}>
+              Review and Transfer
+            </Typography>
+            
+            
+          </Box>
 
-      <Stack flexDirection="row" mt="1em">
-    <Typography variant="h5">Total Amount:{formatCurrencyAmount(amountToPay, CURRENCY.PHP)} </Typography>
-      </Stack>
-      
-      
-      <Button
-        variant="contained"
-        onClick={handlePayment}
-        size="large"
-        sx={{ marginTop: 2 }}
-        disabled={!walletAccounts || isPending}
-      >
-        Next
-      </Button>
-    </Stack>
+          <Box       sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        
+      }}>
+          <CardMedia
+              component="img"
+              alt="MerchantSuccessIcon"
+              style={{ width: '50px', 
+                height: '50px', 
+                objectFit: 'contain',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',  
+              }}
+              src={MerchantIcon} 
+              
+            />
+          </Box>
+
+          <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'center', mb: 1 }}>
+          {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+          </Typography>
+          <Typography variant="body2" sx={{ textAlign: 'center', mb: 3 }}>
+            You are about to pay
+          </Typography>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Avatar sx={{ bgcolor: '#4caf50' }}>M</Avatar>
+            <Box sx={{ ml: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                {description}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              p: 2,
+              border: '1px solid #e0e0e0',
+              borderRadius: 2,
+              mb: 2,
+              backgroundColor: '#f9f9f9',
+            }}
+          >
+            <Typography variant="body2">
+              <strong>Total Amount</strong>: {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Discount</strong>: No available voucher
+            </Typography>
+            <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+              <strong>Transaction Type</strong>: <span style={{ marginLeft: 8 }}>Merchant Payment</span>
+            </Typography>
+          </Box>
+
+          
+
+          <Typography variant="body2" sx={{ color: 'gray', mb: 2 }}>
+            Confirmed transaction will be processed immediately and cannot be reversed.
+          </Typography>
+
+          <FormControlLabel
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={isChecked}
+                  onChange={(event) => setIsChecked(event.target.checked)}
+                />
+              }
+              label="I've reviewed the DApp details and agree to proceed using my crypto wallet."
+              sx={{ mb: 2 }}
+            />
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePayment}
+            disabled={!walletAccounts || isPending || !isChecked}
+            fullWidth
+            sx={{ borderRadius: 2 }}
+          >
+            Pay {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
+          </Button>
+        </CardContent>
+      </Card>
+    </Box>
+
   );
 }
 

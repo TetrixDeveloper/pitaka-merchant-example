@@ -13,7 +13,6 @@ import Login from "features/login";
 import { useGetCurrentUserDetailsQuery } from "features/auth/queries";
 import PinInput from "features/auth/PinInput";
 
-import Logo from "assets/DtakaLogo.png";
 
 interface MainProps {
   auth0: Auth0ContextInterface<User>;
@@ -60,31 +59,29 @@ function Main({ auth0 }: MainProps) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        margin: "20vh auto",
         flexDirection: "column",
       }}
     >
-      <Box mb="1em">
-        <img src={Logo} width={300} alt="logo" />
-      </Box>
+     
       <Box
         sx={{
           minWidth: "50vw",
           padding: 4,
-          border: "2px solid #eee",
+          border: "none",
           borderRadius: 2,
           textAlign: "center",
+          
         }}
       >
         {renderComponents()}
       </Box>
       {isUserAuthenticated && (
-        <Box mt="1em">
+        <Box >
           <Button
             variant="outlined"
             onClick={handleLogout}
             size="large"
-            sx={{ marginTop: 2 }}
+            // sx={{ marginTop: -68  }}
           >
             Logout
           </Button>

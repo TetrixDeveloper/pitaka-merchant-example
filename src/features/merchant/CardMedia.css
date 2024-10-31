@@ -1,0 +1,7 @@
+.card-media-contain {
+    object-fit: contain;
+}
+.box-2{
+    display: flex;
+    justify-content: center;
+}

@@ -1,5 +1,5 @@
 import {  useEffect, useState } from "react";
-import { Button, Stack, Typography, Box, Card, CardContent, Divider, Checkbox, FormControlLabel, Avatar, CardMedia } from "@mui/material";
+import { Button, Typography, Box, Card, CardContent, Checkbox, FormControlLabel, Avatar, CardMedia } from "@mui/material";
 import MerchantIcon from 'assets/Confirmation.svg'
 import { useGetCurrentUserWalletAccounts } from "features/auth/queries";
 import { CURRENCY, formatCurrencyAmount } from "features/utils";

@@ -25,6 +25,7 @@ import './CardMedia.css';
 import { useSnackbar } from 'notistack';
 import LogoutButton from 'features/main/logout';
 
+
 function PayMerchant() {
   const [agreed, setAgreed] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -224,6 +225,7 @@ function PayMerchant() {
         >
           <LogoutButton />
         </Box>
+
       </Box>
     </Container>
   );

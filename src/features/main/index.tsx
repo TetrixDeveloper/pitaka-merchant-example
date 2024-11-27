@@ -2,6 +2,7 @@ import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import { Auth0ContextInterface, User, withAuth0 } from '@auth0/auth0-react';
+
 import { setPitakaToken } from 'graphQLClient';
 
 import PayMerchant from 'features/merchant/PayMerchant';
@@ -19,6 +20,7 @@ function Main({ auth0 }: MainProps) {
 
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const isPinVerified = Boolean(localStorage.getItem('x-pitaka-token'));
+
 
   const renderComponents = useCallback(() => {
     if (isUserAuthenticated && isPinVerified) {
@@ -61,6 +63,7 @@ function Main({ auth0 }: MainProps) {
       >
         {renderComponents()}
       </Box>
+
     </Container>
   );
 }

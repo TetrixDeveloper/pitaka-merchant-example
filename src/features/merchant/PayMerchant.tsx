@@ -23,6 +23,8 @@ import {
 } from './queries';
 import './CardMedia.css';
 import { useSnackbar } from 'notistack';
+import LogoutButton from 'features/main/logout';
+
 
 function PayMerchant() {
   const [agreed, setAgreed] = useState(false);
@@ -87,9 +89,18 @@ function PayMerchant() {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ height: '150vh', bgcolor: '#f5f5f5', p: 0 }}>
+    <Container maxWidth="sm" sx={{ height: '150vh', p: 0 }}>
       <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <AppBar position="static" sx={{ bgcolor: '#1a2b4b', pb: 40 }}>
+        <AppBar
+          position="absolute"
+          sx={{
+            bgcolor: '#1a2b4b',
+            pb: 40,
+            zIndex: 0,
+            display: 'flex',
+            alignItems: 'left',
+          }}
+        >
           <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
             <IconButton edge="start" color="inherit" sx={{ mt: 0 }}>
               <ArrowBack />
@@ -100,7 +111,17 @@ function PayMerchant() {
           </Box>
         </AppBar>
 
-        <Paper sx={{ p: 3, m: 2, mt: -40, borderRadius: 2 }}>
+        <Paper
+          sx={{
+            p: 3,
+            m: 2,
+            mt: 6,
+            borderRadius: 2,
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h5" sx={{ mb: 1 }}>
               Pitaka
@@ -144,7 +165,20 @@ function PayMerchant() {
           </PaymentRow>
         </Paper>
 
-        <Paper sx={{ p: 3, m: 2, mt: 1, mb: 17, borderRadius: 2 }}>
+        <Paper
+          sx={{
+            p: 3,
+            m: 2,
+            mt: 1,
+            mb: 2,
+            borderRadius: 2,
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100% ',
+            mx: 'auto ',
+          }}
+        >
           <Typography sx={{ mb: 2, textAlign: 'left' }}>
             Confirmed transaction will be processed immediately and cannot be
             reversed.
@@ -179,6 +213,19 @@ function PayMerchant() {
         >
           Pay {formatCurrencyAmount(amountToPay, CURRENCY.PHP)}
         </Button>
+
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'flex-end',
+            paddingTop: 2,
+            paddingBottom: 4,
+          }}
+        >
+          <LogoutButton />
+        </Box>
+
       </Box>
     </Container>
   );

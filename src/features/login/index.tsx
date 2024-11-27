@@ -27,9 +27,18 @@ function Login() {
     });
 
   return (
-    <Container maxWidth="sm" sx={{ height: '100vh', bgcolor: '#f5f5f5', p: 0 }}>
+    <Container maxWidth="sm" sx={{ height: '100vh', p: 0 }}>
       <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <AppBar position="static" sx={{ bgcolor: '#1a2b4b', pb: 20 }}>
+        <AppBar
+          position="absolute"
+          sx={{
+            bgcolor: '#1a2b4b',
+            pb: 20,
+            zIndex: 0,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -80,7 +89,17 @@ function Login() {
           </Box>
         </AppBar>
 
-        <Paper sx={{ p: 3, m: 2, mt: -15, borderRadius: 4, flexGrow: 0 }}>
+        <Paper
+          sx={{
+            p: 3,
+            mt: 35,
+            borderRadius: 4,
+            flexGrow: 0,
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Typography variant="h6" sx={{ mb: 2, textAlign: 'left' }}>
             Log in to pay with Pitaka
           </Typography>

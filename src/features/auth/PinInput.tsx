@@ -11,6 +11,7 @@ import {
 import { useVerifyPinMutation } from './mutations';
 import { useSnackbar } from 'notistack';
 import { ArrowBack } from '@mui/icons-material';
+import LogoutButton from 'features/main/logout';
 
 function PinInput() {
   const { mutateAsync } = useVerifyPinMutation();
@@ -40,9 +41,18 @@ function PinInput() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ height: '100vh', bgcolor: '#f5f5f5', p: 0 }}>
+    <Container maxWidth="sm" sx={{ height: '100vh', p: 0 }}>
       <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <AppBar position="static" sx={{ bgcolor: '#1a2b4b', pb: 20 }}>
+        <AppBar
+          position="absolute"
+          sx={{
+            bgcolor: '#1a2b4b',
+            pb: 20,
+            zIndex: 0,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -68,7 +78,17 @@ function PinInput() {
           ></Box>
         </AppBar>
 
-        <Paper sx={{ p: 3, m: 2, mt: -10, borderRadius: 4, flexGrow: 0 }}>
+        <Paper
+          sx={{
+            p: 3,
+            mt: 20,
+            borderRadius: 4,
+            flexGrow: 0,
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
             Log in to pay with Pitaka
           </Typography>
@@ -123,6 +143,16 @@ function PinInput() {
             />
           </Box>
         </Paper>
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'flex-end',
+            paddingBottom: 4,
+          }}
+        >
+          <LogoutButton />
+        </Box>
       </Box>
     </Container>
   );
